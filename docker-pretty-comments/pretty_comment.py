@@ -11,4 +11,4 @@ if __name__ == "__main__":
         comment_text = " ".join(sys.argv[1:])
         print_pretty_comment(comment_text)
     else:
-        print("No comment text provided.")
+        print("Give a comment text.")
