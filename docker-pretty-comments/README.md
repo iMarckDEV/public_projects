@@ -14,32 +14,33 @@ pretty_text = '''
 '''
 
 print(pretty_text)
+```
 
 ##Deploying the Docker Image
 1. Clone this repository:
-<pre>
+
 ```batch
 git clone <repository-url>
 ```
-</pre>
+
 
 2.Navigate to the project directory:
-<pre>
+
 ```batch
 cd docker-pretty-comment
 
 ```
-</pre>
+
 
 3.Build the Docker image:
-<pre>
+
 ```batch
 docker build -t pretty-comment .
 
 ```
-</pre>
+
 4.Run the Docker continer in locally:
-<pre>
+
 ```batch
 docker run -it --entrypoint python pretty-comment pretty_comment.py "This is a sample comment"
 
