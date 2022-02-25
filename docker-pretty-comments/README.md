@@ -49,3 +49,4 @@ docker run -it --entrypoint python pretty-comment pretty_comment.py "This is a s
 ##############################
 ```
 
+And now you can copy and paste the comment in your code, so easily.
