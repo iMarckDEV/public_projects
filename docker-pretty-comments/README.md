@@ -6,17 +6,18 @@ Check out my blog post on [www.imarck.dev](https://www.imarck.dev) for a detaile
 
 ## Example Pretty Comment Format
 
+
 ```python
 pretty_text = '''
-#########################################
+######################################
 #--This is a sample pretty comment!--#
-#########################################
+######################################
 '''
-
 print(pretty_text)
 ```
 
-##Deploying the Docker Image
+## Deploying the Docker Image
+
 1. Clone this repository:
 
 ```batch
@@ -24,7 +25,7 @@ git clone <repository-url>
 ```
 
 
-2.Navigate to the project directory:
+2. Navigate to the project directory:
 
 ```batch
 cd docker-pretty-comment
@@ -32,14 +33,14 @@ cd docker-pretty-comment
 ```
 
 
-3.Build the Docker image:
+3. Build the Docker image:
 
 ```batch
 docker build -t pretty-comment .
 
 ```
 
-4.Run the Docker continer in locally:
+4. Run the Docker continer in locally:
 
 ```batch
 docker run -it --entrypoint python pretty-comment pretty_comment.py "This is a sample comment"
