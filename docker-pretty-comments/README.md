@@ -44,5 +44,8 @@ docker build -t pretty-comment .
 ```batch
 docker run -it --entrypoint python pretty-comment pretty_comment.py "This is a sample comment"
 
+##############################
+#--This is a sample comment--#
+##############################
 ```
 
