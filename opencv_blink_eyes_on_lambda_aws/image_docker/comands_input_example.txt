@@ -1,0 +1,4 @@
+{
+  "bucket": "data-inputs-opencv-tmps",
+  "obj_key": "blink.mpeg"
+}
