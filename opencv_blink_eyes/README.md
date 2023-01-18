@@ -48,7 +48,8 @@ python blink_detection.py
     so, in this case the origin of the video could be a video file o the camera if in the line 36 of blink_detection.py 
     ```python
     vs = cv2.VideoCapture(0) ##change 0 by the path of the video too
-    ```
+    
+    
 
 3. The script will open the camera or load a face video and start detecting blinks. The blink count will be displayed on the console.
 
