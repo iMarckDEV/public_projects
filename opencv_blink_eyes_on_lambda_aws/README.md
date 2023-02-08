@@ -16,7 +16,7 @@ This script is written in Python and uses several libraries to detect and count 
 
 Make sure you have these libraries installed before running the script.
 
-## Dcokerfile
+## Dockerfile
 
 1. uses the OS ubuntu:22.04 
 
