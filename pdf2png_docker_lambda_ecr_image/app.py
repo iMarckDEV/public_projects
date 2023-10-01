@@ -3,6 +3,9 @@ import os
 import sys
 import uuid
 import json
+import cv2
+import numpy as np
+
 try:
  from PIL import Image, ImageEnhance, ImageFilter
 except ImportError:
@@ -13,7 +16,51 @@ from pdf2image  import convert_from_path
 
 s3_client = boto3.client('s3')
 
+def image_rut(image_path):
+    
+    # Load the PNG image
+    image = cv2.imread(image_path)
 
+    # Convert the image to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # Apply Gaussian blur to reduce noise and improve contour detection
+    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+
+    # Use Canny edge detection to find edges in the image
+    edges = cv2.Canny(blurred, 50, 150)
+
+    # Find contours in the edged image
+    contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    # Create a list to store cropped images
+    cropped_images = []
+
+    # Iterate through the detected contours
+    for contour in contours:
+        # Approximate the contour to a polygon
+        epsilon = 0.04 * cv2.arcLength(contour, True)
+        approx = cv2.approxPolyDP(contour, epsilon, True)
+
+        # Check if the polygon has 4 vertices (indicating a rectangle)
+        if len(approx) == 4:
+            # Get the bounding box of the rectangle
+            x, y, w, h = cv2.boundingRect(approx)
+
+            # Crop the rectangle region from the original image
+            if h>100 and w>300 and w<800 and y<300 and x>900:
+                #print(f'h:{h}-w:{w}')
+                cropped = image[y:y+h, x:x+w]
+
+                # Append the cropped image to the list
+                cropped_images.append(cropped)
+
+    # Save each cropped image as a separate file
+    for i, cropped in enumerate(cropped_images):
+
+        filename = image_path.replace('.png','_rut.png')
+        cv2.imwrite(filename, cropped)
+        return filename
 
 def handler(event, context):
     #funciona por un json que contenga bucket y obj_key
@@ -62,6 +109,14 @@ def handler(event, context):
         img.save(image_filename, 'PNG')
         list_files_ephemeral_storage.append(image_filename)
 
+    list_files_ephemeral_storage2=[]
+    for imag in list_files_ephemeral_storage:
+        if len(imag)>5:
+            rut=image_rut(imag)
+            print(rut)
+            list_files_ephemeral_storage2.append(rut)
+
+
     #r_img.save('/tmp/scaled_{}'.format(archivo_name))
     """
     print(f'path ephemeral:{download_path}')
@@ -94,11 +149,19 @@ def handler(event, context):
     """
     print('>>to s3')
     for file in list_files_ephemeral_storage:
-        print(file)
-        s3_client.upload_file(file, bucket_out, file.replace('/tmp/',''))##COPIAR EL ARCHIVO desde tmp a s3
+        if file is not None:
+            print(file)
+            s3_client.upload_file(file, bucket_out, file.replace('/tmp/',''))##COPIAR EL ARCHIVO desde tmp a s3
 
-        os.remove(file) 
-        
+            os.remove(file) 
+    if len(list_files_ephemeral_storage2) >0:       
+        for file in list_files_ephemeral_storage2:
+            if file is not None:
+                print(file)
+                s3_client.upload_file(file, bucket_out, file.replace('/tmp/',''))##COPIAR EL ARCHIVO desde tmp a s3
+
+                os.remove(file) 
+
     ##    resize_image(download_path, upload_path)
     #s3_client.upload_file(upload_path, 'mloaiza.test','rs-{}'.format(key))
 

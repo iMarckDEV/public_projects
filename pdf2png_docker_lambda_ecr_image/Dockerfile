@@ -33,6 +33,8 @@ RUN apt update \
   && apt-get install ffmpeg libsm6 libxext6 -y
 #RUN pip3 install --upgrade pdf2image
 RUN pip install pdf2image
+RUN pip install numpy
+RUN pip3 install opencv-python
 #RUN pip3 install pypdfium2
 RUN pip3 install pillow
 RUN pip install boto3
